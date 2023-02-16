@@ -24,3 +24,12 @@ ul li >a{
     text-decoration: none;
     align-self: center;
 }
+.btn{
+    width:100px;
+    padding: 10px;
+    font-weight: bold;
+    background-color: #000;
+    color: #ffff;
+    border-radius: 5px;
+    cursor: pointer;
+}

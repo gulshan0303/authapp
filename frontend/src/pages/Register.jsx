@@ -1,7 +1,16 @@
 import "./style.css";
 import { FaUser } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import {useDispatch,useSelector} from 'react-redux'
+import {toast} from 'react-toastify'
+import {register,reset} from "../features/auth/authSlice"
+import {useNavigate} from 'react-router-dom'
 const Register = () => {
+ const navigate = useNavigate();
+ const dispatch = useDispatch();
+
+ const {user,isLoading,isError,message,isSuccess} = useSelector((state) => state.auth)
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,8 +27,32 @@ const Register = () => {
     }))
   };
   const Onsubmit = (e) => {
-    e.preventDefoult();
+    e.preventDefault();
+
+     if(password !==cpassword){
+       toast.error('password do not match')
+     }else{
+        const userData = {
+          name,email,password
+        }
+        dispatch(register(userData))
+     }
   };
+
+  useEffect( () =>{
+      if(isError){
+        toast.error(message)
+      }
+
+      if(isSuccess || user){
+        navigate('/')
+      }
+      dispatch(reset());
+  },[isError,isSuccess,message,dispatch,user,navigate])
+
+  if(isLoading){
+    return <p>Loading...</p>
+  }
   return (
     <>
       <div className="register">
@@ -81,6 +114,6 @@ const Register = () => {
       </div>
     </>
   );
-};
+}; 
 
 export default Register;
